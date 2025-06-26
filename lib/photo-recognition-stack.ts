@@ -6,7 +6,7 @@ import * as tasks from "aws-cdk-lib/aws-stepfunctions-tasks";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 
-const BUCKET_NAME = "photo-upload-bucket";
+const BUCKET_NAME = "photo-upload-bucket-75477";
 
 export class PhotoRecognitionStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {

@@ -6,13 +6,10 @@ import { v4 as uuidv4 } from "uuid";
 
 // lambda entry point
 export const handler = async (event: any, context: any) => {
-  console.log("Event: ", JSON.stringify(event, null, 2));
-
   const s3Client = new S3Client();
   const bucketName = process.env.BUCKET_NAME;
 
-  console.log("Bucket Name: ", bucketName);
-
+  const buffer = Buffer.from(event.body.photo, "base64"); // Decode the base64 photo
   const key = `photos/${uuidv4()}.jpg`; // Generate a unique key for the photo
 
   try {
@@ -21,8 +18,9 @@ export const handler = async (event: any, context: any) => {
       new PutObjectCommand({
         Bucket: bucketName,
         Key: key,
-        Body: event.body,
+        Body: buffer,
         ContentType: "image/jpeg",
+        ContentEncoding: "base64",
       })
     );
     console.log("Upload Result: ", JSON.stringify(uploadResult, null, 2));
