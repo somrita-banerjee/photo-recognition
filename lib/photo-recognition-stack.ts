@@ -6,18 +6,30 @@ import * as tasks from "aws-cdk-lib/aws-stepfunctions-tasks";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 
-const BUCKET_NAME = "photo-recognition-bucket";
+const BUCKET_NAME = "photo-upload-bucket";
 
 export class PhotoRecognitionStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Create an S3 bucket for photo uploads
-    const photoBucket = new s3.Bucket(this, "PhotoBucket", {
-      bucketName: BUCKET_NAME,
-      removalPolicy: cdk.RemovalPolicy.DESTROY, // Only for development purposes
-      autoDeleteObjects: true, // Only for development purposes
-    });
+    // Create an S3 bucket for photo uploads if it doesn't already exist
+    const existingBucket = s3.Bucket.fromBucketName(
+      this,
+      "ExistingPhotoBucket",
+      BUCKET_NAME
+    );
+
+    let photoBucket: s3.IBucket;
+    // If the bucket does not exist, create a new one
+    if (!existingBucket.bucketName) {
+      photoBucket = new s3.Bucket(this, "PhotoBucket", {
+        bucketName: BUCKET_NAME,
+        removalPolicy: cdk.RemovalPolicy.DESTROY, // Only for development purposes
+        autoDeleteObjects: true, // Only for development purposes
+      });
+    } else {
+      photoBucket = existingBucket;
+    }
 
     // Lambda function for photo upload
     const photoUploadFunction = new lambda.Function(
