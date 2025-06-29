@@ -27,19 +27,20 @@ export const handler = async (event: any, context: any) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
+      body: {
         message: "Photo uploaded successfully",
+        imageKey: key,
         uploadResult,
-      }),
+      },
     };
   } catch (error) {
     console.error("Error uploading photo: ", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({
+      body: {
         message: "Error uploading photo",
         error,
-      }),
+      },
     };
   }
 };

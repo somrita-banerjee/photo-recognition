@@ -64,6 +64,13 @@ export class PhotoRecognitionStack extends cdk.Stack {
       }
     );
 
+    photoRecognitionFunction.addToRolePolicy(
+      new cdk.aws_iam.PolicyStatement({
+        actions: ["rekognition:DetectModerationLabels"],
+        resources: ["*"],
+      })
+    );
+
     // Define the Step Functions state machine
     // that orchestrates the photo upload and recognition tasks
 
@@ -102,15 +109,9 @@ export class PhotoRecognitionStack extends cdk.Stack {
     );
 
     // Api Gateway integration for the state machine
-    const api = new apigw.RestApi(this, "PhotoRecognitionApi", {
-      restApiName: "Photo Recognition Service",
-      description: "This service handles photo uploads and recognition.",
+    const api = new apigw.StepFunctionsRestApi(this, "PhotoRecognitionApi", {
+      stateMachine: stateMachine,
     });
-
-    api.root.addMethod(
-      "POST",
-      apigw.StepFunctionsIntegration.startExecution(stateMachine)
-    );
 
     // Outputs
     new cdk.CfnOutput(this, "StateMachineArn", {
