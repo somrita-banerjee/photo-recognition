@@ -9,8 +9,9 @@ export const handler = async (event: any, context: any) => {
   const s3Client = new S3Client();
   const bucketName = process.env.BUCKET_NAME;
 
-  const buffer = Buffer.from(event.body.photo, "base64"); // Decode the base64 photo
-  const key = `photos/${uuidv4()}.jpg`; // Generate a unique key for the photo
+  const cleanBase64 = event.body.photo.replace(/^data:image\/jpeg;base64,/, "");
+  const buffer = Buffer.from(cleanBase64, "base64"); // Decode the base64 photo
+  const key = `photos/${uuidv4()}.jpeg`; // Generate a unique key for the photo
 
   try {
     // Upload the photo to S3
@@ -20,7 +21,6 @@ export const handler = async (event: any, context: any) => {
         Key: key,
         Body: buffer,
         ContentType: "image/jpeg",
-        ContentEncoding: "base64",
       })
     );
     console.log("Upload Result: ", JSON.stringify(uploadResult, null, 2));

@@ -71,6 +71,13 @@ export class PhotoRecognitionStack extends cdk.Stack {
       })
     );
 
+    photoRecognitionFunction.addToRolePolicy(
+      new cdk.aws_iam.PolicyStatement({
+        actions: ["s3:GetObjectAcl", "s3:GetObject"],
+        resources: [photoBucket.arnForObjects("*")],
+      })
+    );
+
     // Define the Step Functions state machine
     // that orchestrates the photo upload and recognition tasks
 
