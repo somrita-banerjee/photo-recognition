@@ -1,11 +1,22 @@
 // imports
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 
 // helper methods
 
 // lambda entry point
 export const handler = async (event: any, context: any) => {
+  const hash = crypto
+    .createHash("sha256")
+    .update(event.body.apiKey)
+    .digest("hex");
+  if (
+    hash !== "2c901d204202209cbab59683082264ae977128a037c898098f893851e25913ea"
+  ) {
+    throw new Error("Unauthorized: Invalid or missing API key");
+  }
+
   const s3Client = new S3Client();
   const bucketName = process.env.BUCKET_NAME;
 
