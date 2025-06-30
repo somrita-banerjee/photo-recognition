@@ -29,11 +29,9 @@ export const handler = async (event: any, context: any) => {
 
     if (detectedLabels.length === 0) {
       return {
-        statusCode: 200,
-        body: {
-          classification: "safe",
-          message: "No moderation labels detected. The image appears safe.",
-        },
+        status: "safe",
+        labels: [],
+        userMessage: "No moderation labels detected. The image appears safe.",
       };
     }
 
