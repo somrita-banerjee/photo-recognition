@@ -6,6 +6,7 @@ This project uses the AWS CDK to deploy a photo recognition application that uti
 - Node.js (v20.x or later)
 - AWS CDK (v2.x)
 - AWS CLI configured with your credentials
+- AWS account with permissions to create and manage the required resources
 
 # Getting Started
 1. Clone the repository
@@ -26,6 +27,7 @@ This project uses the AWS CDK to deploy a photo recognition application that uti
    ```bash
    cdk deploy
    ```
+
 
 # Frontend Client
 
@@ -82,6 +84,10 @@ The backend API is built using AWS Lambda and AWS Step Functions. It handles ima
 # Development
 
 This project is structured to allow for easy development and testing of the photo recognition application. The main components are organized in a modular way, making it easy to update and maintain the codebase. The Lambda function and Step Function can be developed independently, allowing for quick iterations and testing.
+
+# How the application used AWS Lambda
+
+The application uses AWS Lambda to process images in a serverless manner. When a user uploads an image to the S3 bucket, it triggers a Lambda function that starts the image processing workflow. The Lambda function is responsible for analyzing the image using Amazon Rekognition and returning the results. 
 
 # Troubleshooting
 
